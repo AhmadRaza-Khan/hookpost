@@ -41,7 +41,7 @@ you already run.
 go get github.com/ahmadraza-khan/hookpost
 ```
 
-Requires Go 1.22+ and PostgreSQL 14+.
+Requires Go 1.25+ and PostgreSQL 14+.
 
 ## Quick start
 

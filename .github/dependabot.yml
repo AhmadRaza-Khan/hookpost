@@ -4,14 +4,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Only direct deps: indirect x/* bumps often raise the go directive past
+    # our minimum. govulncheck in CI flags any that matter for security.
     allow:
       - dependency-type: direct
-    ignore:
-      # pgx 5.7.5+ requires Go 1.23; 5.7.4 is the newest release that
-      # supports our Go 1.22 minimum (see docs/DECISIONS.md). Remove this
-      # when the minimum Go version is raised.
-      - dependency-name: github.com/jackc/pgx/v5
-        versions: [">= 5.7.5"]
   - package-ecosystem: github-actions
     directory: /
     schedule:

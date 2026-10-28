@@ -11,9 +11,7 @@ databases can come later behind a store interface.
 ## pgx v5, not database/sql
 
 `Send` must join the caller's transaction, and pgx is what most Postgres Go
-apps use. A `database/sql` adapter is planned. The module requires pgx
-v5.7.4, the newest release that still supports Go 1.21+; applications that
-use a newer pgx get it automatically through minimal version selection.
+apps use. A `database/sql` adapter is planned.
 
 ## Standard Webhooks for signing
 
@@ -53,10 +51,17 @@ Checking the URL's hostname is not enough (DNS can point at, or rebind
 to, an internal address). The dialer checks the resolved IP, and redirects
 are never followed.
 
-## Go 1.22 minimum
+## Go 1.25 minimum
 
-Needed for `ServeMux` method and path patterns and `math/rand/v2`. Tests
-use `DATABASE_URL` rather than testcontainers-go, whose current releases
-need a newer Go.
+Set by the dependencies: pgx v5.9.2+ (fixes GO-2026-5004, SQL injection via
+dollar-quoted placeholders) and golang.org/x/text v0.39+ (GO-2026-5970,
+GO-2026-6629) require Go 1.25. The first plan was Go 1.22 with pgx v5.7.4,
+but govulncheck showed hookpost reaches those vulnerable code paths, and a
+webhook library should not ship with a known SQL injection in its driver.
+Go 1.25 also covers what the code itself needs (ServeMux patterns,
+`math/rand/v2`). CI tests the minimum and the latest stable Go.
+
+Tests use `DATABASE_URL` rather than testcontainers-go to keep the test
+dependency tree small; CI provides Postgres as a service container.
 
 ## MIT license
