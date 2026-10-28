@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest an addition or change
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        hookpost stays small on purpose. Describing the problem you're
+        solving helps more than a proposed API. Check
+        [docs/ROADMAP.md](https://github.com/ahmadraza-khan/hookpost/blob/main/docs/ROADMAP.md)
+        first; it may already be planned.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like hookpost to do?
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: How are you working around it today?
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you be willing to send a pull request?
+      options:
+        - "Yes"
+        - "Maybe, with guidance"
+        - "No"

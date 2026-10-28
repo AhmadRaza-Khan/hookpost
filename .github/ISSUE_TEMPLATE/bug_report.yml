@@ -1,0 +1,51 @@
+name: Bug report
+description: Something in hookpost doesn't work as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! For security problems, please use
+        **Security → Report a vulnerability** instead of a public issue.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest code (and config) that shows the problem.
+      render: go
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or errors
+      description: Relevant log lines, error messages, or rows from hookpost_attempts.
+      render: text
+  - type: input
+    id: hookpost
+    attributes:
+      label: hookpost version
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: go
+    attributes:
+      label: Go version
+      placeholder: go version go1.25.4 linux/amd64
+    validations:
+      required: true
+  - type: input
+    id: postgres
+    attributes:
+      label: PostgreSQL version (and PgBouncer, if any)
+      placeholder: "16.4, no PgBouncer"
+    validations:
+      required: true
