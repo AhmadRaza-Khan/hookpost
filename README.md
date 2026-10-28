@@ -2,7 +2,6 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/ahmadraza-khan/hookpost.svg)](https://pkg.go.dev/github.com/ahmadraza-khan/hookpost)
 [![CI](https://github.com/ahmadraza-khan/hookpost/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmadraza-khan/hookpost/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/ahmadraza-khan/hookpost)](https://goreportcard.com/report/github.com/ahmadraza-khan/hookpost)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Reliable outgoing webhooks for Go apps on Postgres: transactional enqueue,
