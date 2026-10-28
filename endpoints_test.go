@@ -195,7 +195,7 @@ type signedBy struct {
 	}
 }
 
-func (s *signedBy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (s *signedBy) ServeHTTP(_ http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
 	s.mu.Lock()
 	s.reqs = append(s.reqs, struct {

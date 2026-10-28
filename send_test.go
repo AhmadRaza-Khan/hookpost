@@ -8,8 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ahmadraza-khan/hookpost"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/ahmadraza-khan/hookpost"
 )
 
 // newSendClient migrates and returns a client plus an owner ID unique to the

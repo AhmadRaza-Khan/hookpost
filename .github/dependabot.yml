@@ -4,11 +4,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
-    ignore:
-      # pgx is pinned to the newest release that supports our Go 1.22
-      # minimum (see docs/DECISIONS.md). Bump it with the minimum Go version.
-      - dependency-name: github.com/jackc/pgx/v5
-        update-types: ["version-update:semver-minor"]
+    # Only direct deps: indirect x/* bumps often raise the go directive past
+    # our minimum. govulncheck in CI flags any that matter for security.
+    allow:
+      - dependency-type: direct
   - package-ecosystem: github-actions
     directory: /
     schedule:
