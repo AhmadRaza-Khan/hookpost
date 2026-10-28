@@ -247,15 +247,6 @@ func (c *Client) post(ctx context.Context, d leased) (int, string, error) {
 	return resp.StatusCode, string(bytes.ToValidUTF8(body, []byte("�"))), nil
 }
 
-// disableEndpoint is the dispatcher's unscoped disable (e.g. on 410 Gone).
-func (c *Client) disableEndpoint(ctx context.Context, id, reason string) {
-	_, err := c.pool.Exec(ctx, `
-		UPDATE hookpost_endpoints
-		SET disabled = true, disabled_reason = $2, updated_at = now()
-		WHERE id = $1`, id, reason)
-	logIfErr(c, "disable endpoint", err)
-}
-
 // listen wakes the dispatch loop on NOTIFY, reconnecting on errors.
 func (c *Client) listen(ctx context.Context, wake chan<- struct{}) {
 	for ctx.Err() == nil {

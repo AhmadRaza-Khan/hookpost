@@ -128,7 +128,7 @@ func New(pool *pgxpool.Pool, cfg Config) (*Client, error) {
 	}
 	hc := cfg.HTTPClient
 	if hc == nil {
-		hc = newHTTPClient(cfg.Timeout)
+		hc = newHTTPClient(cfg.Timeout, cfg.AllowPrivateNetworks)
 	}
 	return &Client{pool: pool, cfg: cfg, http: hc, log: cfg.Logger}, nil
 }
@@ -138,16 +138,4 @@ func New(pool *pgxpool.Pool, cfg Config) (*Client, error) {
 func notify(ctx context.Context, db DBTX) error {
 	_, err := db.Exec(ctx, `SELECT pg_notify($1, '')`, notifyChannel)
 	return err
-}
-
-// newHTTPClient returns the default delivery client. It never follows
-// redirects: receivers should register their final URL, and a 3xx counts as
-// a failed attempt.
-func newHTTPClient(timeout time.Duration) *http.Client {
-	return &http.Client{
-		Timeout: timeout,
-		CheckRedirect: func(*http.Request, []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
 }

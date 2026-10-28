@@ -21,6 +21,7 @@ const testOwner = "shop_1"
 func newDispatchClient(t *testing.T, cfg hookpost.Config) *hookpost.Client {
 	t.Helper()
 	pool := needDB(t)
+	cfg.AllowPrivateNetworks = true // httptest servers listen on 127.0.0.1
 	if cfg.PollInterval == 0 {
 		cfg.PollInterval = 20 * time.Millisecond
 	}
@@ -358,7 +359,9 @@ func TestResponseBodyTruncated(t *testing.T) {
 
 func TestTwoDispatchersDeliverOnce(t *testing.T) {
 	c1 := newDispatchClient(t, hookpost.Config{Workers: 5})
-	c2, err := hookpost.New(testPool, hookpost.Config{Workers: 5, PollInterval: 20 * time.Millisecond, Retention: -1})
+	c2, err := hookpost.New(testPool, hookpost.Config{
+		Workers: 5, PollInterval: 20 * time.Millisecond, Retention: -1, AllowPrivateNetworks: true,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
