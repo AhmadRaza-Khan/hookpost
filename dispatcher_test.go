@@ -425,6 +425,16 @@ func TestListenWakesDispatcher(t *testing.T) {
 	waitStatus(t, msgID, "succeeded")
 }
 
+func TestDisableListenStillPolls(t *testing.T) {
+	c := newDispatchClient(t, hookpost.Config{DisableListen: true, PollInterval: 50 * time.Millisecond})
+	serve(t, &receiver{})
+	run(t, c)
+	time.Sleep(100 * time.Millisecond)
+
+	msgID := send(t, c, 1)
+	waitStatus(t, msgID, "succeeded")
+}
+
 func TestDisabledEndpointPausesDeliveries(t *testing.T) {
 	c := newDispatchClient(t, hookpost.Config{})
 	rc := &receiver{}
