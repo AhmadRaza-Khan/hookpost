@@ -1,0 +1,12 @@
+{
+  "name": "hookpost-receiver-node",
+  "private": true,
+  "description": "Verifies hookpost webhooks with the standardwebhooks npm package",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "standardwebhooks": "1.1.1"
+  }
+}

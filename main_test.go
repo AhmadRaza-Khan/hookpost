@@ -26,7 +26,11 @@ func TestMain(m *testing.M) {
 		}
 		defer pool.Close()
 		testPool = pool
-		return m.Run()
+		code := m.Run()
+		// Leave no pending deliveries behind for a dev dispatcher to pick up.
+		_, _ = pool.Exec(context.Background(), `TRUNCATE hookpost_endpoints, hookpost_messages,
+			hookpost_deliveries, hookpost_attempts CASCADE`)
+		return code
 	}()
 	os.Exit(code)
 }

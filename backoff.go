@@ -6,7 +6,7 @@ import (
 )
 
 // DefaultSchedule is the delay after attempt 1, 2, ... giving 8 attempts over
-// about 1.5 days. Slice it to build a shorter schedule:
+// about 27.5 hours. Slice it to build a shorter schedule:
 //
 //	cfg.Schedule = hookpost.DefaultSchedule[:3] // 4 attempts total
 var DefaultSchedule = []time.Duration{
