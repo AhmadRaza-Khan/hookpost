@@ -6,9 +6,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-28
+
+First release. Requires Go 1.25+ and PostgreSQL 14+.
+
 ### Added
 
-- Initial release.
 - `signature` package: Standard Webhooks signing and verification,
   `Middleware` for receivers. No dependencies outside the standard library.
 - Postgres schema with embedded, concurrency-safe `Migrate`.
@@ -25,4 +28,5 @@ project follows [Semantic Versioning](https://semver.org/).
 - `AdminHandler`: owner-scoped JSON API for endpoints, messages,
   deliveries, attempts, retry, recover and resend.
 
-[Unreleased]: https://github.com/ahmadraza-khan/hookpost/commits/main
+[Unreleased]: https://github.com/ahmadraza-khan/hookpost/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/ahmadraza-khan/hookpost/releases/tag/v0.1.0
