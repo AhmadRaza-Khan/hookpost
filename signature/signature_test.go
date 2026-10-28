@@ -246,7 +246,7 @@ func FuzzVerify(f *testing.F) {
 	f.Add("msg_1", "1700000000", "v1,abc", []byte("{}"))
 	f.Add("", "", "", []byte(nil))
 	f.Add("msg_1", "-1", "v1, v1,,, v2", []byte("x"))
-	f.Fuzz(func(t *testing.T, id, ts, sig string, body []byte) {
+	f.Fuzz(func(_ *testing.T, id, ts, sig string, body []byte) {
 		h := http.Header{}
 		h.Set(HeaderID, id)
 		h.Set(HeaderTimestamp, ts)

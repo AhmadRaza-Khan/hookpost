@@ -51,7 +51,7 @@ func TestLeaseExpiryAndStaleWorker(t *testing.T) {
 
 	var mu sync.Mutex
 	var ids []string
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv := httptest.NewServer(http.HandlerFunc(func(_ http.ResponseWriter, r *http.Request) {
 		mu.Lock()
 		ids = append(ids, r.Header.Get(signature.HeaderID))
 		mu.Unlock()

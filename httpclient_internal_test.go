@@ -29,7 +29,7 @@ func TestBlocked(t *testing.T) {
 }
 
 func TestHTTPClientGuard(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {}))
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
 	defer srv.Close()
 
 	get := func(hc *http.Client) error {
