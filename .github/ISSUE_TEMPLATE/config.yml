@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/ahmadraza-khan/hookpost/security/advisories/new
+    about: Please report security problems privately, not as a public issue.
+  - name: Ask a question
+    url: https://github.com/ahmadraza-khan/hookpost/discussions
+    about: Usage questions and ideas (enable Discussions in the repo settings first).

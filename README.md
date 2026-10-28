@@ -230,6 +230,13 @@ v0.1 is Postgres-only, uses exact event-type matching (no wildcards) and
 stores endpoint secrets in plaintext (see [SECURITY.md](SECURITY.md)).
 Planned: wildcard filters, `SendBatch`, encrypted secrets, per-endpoint rate
 limits, a `database/sql` adapter, OpenTelemetry, and an embeddable dashboard.
+See [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Contributing
+
+Issues and pull requests are welcome; please read
+[CONTRIBUTING.md](CONTRIBUTING.md) first. Security reports go through
+[SECURITY.md](SECURITY.md).
 
 ## License
 
