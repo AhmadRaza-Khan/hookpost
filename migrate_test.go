@@ -11,7 +11,7 @@ import (
 
 func newMigrateClient(t *testing.T) *hookpost.Client {
 	t.Helper()
-	c, err := hookpost.New(needDB(t))
+	c, err := hookpost.New(needDB(t), hookpost.Config{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func dropTables(t *testing.T) {
 }
 
 func TestNewNilPool(t *testing.T) {
-	if _, err := hookpost.New(nil); !errors.Is(err, hookpost.ErrNoPool) {
+	if _, err := hookpost.New(nil, hookpost.Config{}); !errors.Is(err, hookpost.ErrNoPool) {
 		t.Fatalf("got %v, want ErrNoPool", err)
 	}
 }
