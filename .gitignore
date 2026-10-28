@@ -1,0 +1,8 @@
+/bin/
+*.test
+*.out
+coverage.*
+cover.out
+.env
+node_modules/
+guide
