@@ -15,6 +15,9 @@ import (
 // Version is the library version, used in the default User-Agent.
 const Version = "0.1.0"
 
+// notifyChannel is the Postgres LISTEN/NOTIFY channel that wakes dispatchers.
+const notifyChannel = "hookpost"
+
 // DBTX is satisfied by *pgxpool.Pool, *pgx.Conn and pgx.Tx, so Send can run
 // inside the caller's own transaction.
 type DBTX interface {
@@ -42,11 +45,20 @@ type Config struct {
 	MaxResponseBytes int64
 	// UserAgent header sent with every request. Default "hookpost/<Version>".
 	UserAgent string
+	// RawPayload sends the payload as-is instead of wrapping it in the
+	// {"type","timestamp","data"} envelope.
+	RawPayload bool
 	// AllowPrivateNetworks disables the SSRF guard and allows http:// URLs.
 	// Only for local development and tests.
 	AllowPrivateNetworks bool
 	// HTTPClient replaces the built-in client entirely; you then own SSRF safety.
 	HTTPClient *http.Client
+	// DisableListen turns off LISTEN/NOTIFY wake-ups (e.g. behind PgBouncer in
+	// transaction mode). Deliveries are then picked up on the next poll.
+	DisableListen bool
+	// Retention is how long finished messages are kept before Run prunes
+	// them. Default 30 days; negative disables pruning.
+	Retention time.Duration
 	// Logger for dispatcher errors. Default slog.Default().
 	Logger *slog.Logger
 	// OnAttempt is called after every delivery attempt (e.g. for metrics).
@@ -108,6 +120,9 @@ func New(pool *pgxpool.Pool, cfg Config) (*Client, error) {
 	if cfg.UserAgent == "" {
 		cfg.UserAgent = "hookpost/" + Version
 	}
+	if cfg.Retention == 0 {
+		cfg.Retention = 30 * 24 * time.Hour
+	}
 	if cfg.Logger == nil {
 		cfg.Logger = slog.Default()
 	}
@@ -116,6 +131,13 @@ func New(pool *pgxpool.Pool, cfg Config) (*Client, error) {
 		hc = newHTTPClient(cfg.Timeout)
 	}
 	return &Client{pool: pool, cfg: cfg, http: hc, log: cfg.Logger}, nil
+}
+
+// notify wakes listening dispatchers. Inside a transaction Postgres delivers
+// it only on commit, which is exactly when the work becomes visible.
+func notify(ctx context.Context, db DBTX) error {
+	_, err := db.Exec(ctx, `SELECT pg_notify($1, '')`, notifyChannel)
+	return err
 }
 
 // newHTTPClient returns the default delivery client. It never follows
