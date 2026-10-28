@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (go ${{ matrix.go }}, postgres ${{ matrix.postgres }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ["1.22", "stable"] # minimum supported + latest
+        postgres: ["14", "16"]
+    services:
+      postgres:
+        image: postgres:${{ matrix.postgres }}
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: hookpost
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/hookpost?sslmode=disable
+      GOTOOLCHAIN: local # really test on matrix.go, never auto-download a newer one
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: ${{ matrix.go }}
+      - run: go build ./...
+      - run: go test -race -count=1 -coverprofile=cover.out ./...
+      - run: go tool cover -func=cover.out | tail -1
+      - run: go test -run='^$' -fuzz=FuzzVerify -fuzztime=20s ./signature
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.15.0
+      - name: govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+      - name: go mod tidy is clean
+        run: go mod tidy && git diff --exit-code go.mod go.sum

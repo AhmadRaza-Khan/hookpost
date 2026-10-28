@@ -1,0 +1,27 @@
+version: "2"
+
+linters:
+  # "standard" = errcheck, govet, ineffassign, staticcheck, unused
+  default: standard
+  enable:
+    - bodyclose # unclosed HTTP response bodies
+    - gosec # security lints; worth it for a webhook library
+    - misspell
+    - noctx # HTTP requests without a context
+    - revive
+  exclusions:
+    presets:
+      - std-error-handling
+    rules:
+      # Tests and examples use httptest servers, literal URLs and fixed secrets.
+      - path: (_test\.go|^examples/)
+        linters: [gosec, noctx]
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/ahmadraza-khan/hookpost

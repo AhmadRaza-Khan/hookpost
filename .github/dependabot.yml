@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # pgx is pinned to the newest release that supports our Go 1.22
+      # minimum (see docs/DECISIONS.md). Bump it with the minimum Go version.
+      - dependency-name: github.com/jackc/pgx/v5
+        update-types: ["version-update:semver-minor"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /examples/receiver-node
+    schedule:
+      interval: monthly
